@@ -8,6 +8,15 @@ from app.models import db
 # Initialize Marshmallow
 ma = Marshmallow()
 
+# =============================================================================
+# 🎯 PRESENTATION NOTE - CODE QUALITY & CONFIGURATION REQUIREMENT 
+# This file demonstrates:
+# - MODULAR ARCHITECTURE with blueprints
+# - BLUEPRINT REGISTRATION
+# - DATABASE TABLE CREATION
+# - APPLICATION FACTORY PATTERN
+# =============================================================================
+
 def create_app(config_name='development'):
     """Application factory pattern"""
     app = Flask(__name__)
@@ -19,14 +28,16 @@ def create_app(config_name='development'):
     db.init_app(app)
     ma.init_app(app)
     
+    # MODULAR ARCHITECTURE REQUIREMENT
     # Import and register blueprints
     from app.routes.user_routes import user_bp
     from app.routes.product_routes import product_bp
     from app.routes.order_routes import order_bp
     
-    app.register_blueprint(user_bp)
-    app.register_blueprint(product_bp)
-    app.register_blueprint(order_bp)
+    # BLUEPRINT REGISTRATION REQUIREMENT
+    app.register_blueprint(user_bp)      # REQ4: /users endpoints
+    app.register_blueprint(product_bp)   # REQ4: /products endpoints
+    app.register_blueprint(order_bp)     # REQ4: /orders endpoints
     
     # Add a home route
     @app.route('/')
@@ -41,8 +52,9 @@ def create_app(config_name='development'):
             }
         }
     
+    # 🎤 PRESENTATION POINT 30: DATABASE TABLE CREATION REQUIREMENT
     # Create tables
     with app.app_context():
-        db.create_all()
+        db.create_all()  # REQ4: db.create_all() as required by assignment
     
     return app
