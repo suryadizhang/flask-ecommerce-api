@@ -1,0 +1,18 @@
+# Flask Framework
+Flask==3.0.0
+Flask-SQLAlchemy==3.1.1
+Flask-Marshmallow==1.2.1
+
+# Marshmallow for serialization
+marshmallow==3.21.3
+marshmallow-sqlalchemy==0.29.0
+
+# Database drivers
+mysql-connector-python==8.2.0
+
+# Development and testing
+python-dotenv==1.0.0
+flask-cors==4.0.0
+
+# Production server
+gunicorn==21.2.0
