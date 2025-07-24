@@ -7,6 +7,7 @@ from app.schemas.product_schema import product_schema, products_schema
 # Create a blueprint for product routes
 product_bp = Blueprint('products', __name__, url_prefix='/products')
 
+
 @product_bp.route('', methods=['POST'])
 def create_product():
     """Create a new product"""
@@ -35,7 +36,7 @@ def get_products():
     """Get all products"""
     query = select(Product)
     products = db.session.execute(query).scalars().all()
-    return products_schema.jsonify(products)
+    return jsonify(products_schema.dump(products))
 
 @product_bp.route('/<int:id>', methods=['GET'])
 def get_product(id):
@@ -45,7 +46,7 @@ def get_product(id):
     if not product:
         return jsonify({'error': 'Product not found'}), 404
     
-    return product_schema.jsonify(product)
+    return jsonify(product_schema.dump(product))
 
 @product_bp.route('/<int:id>', methods=['PUT'])
 def update_product(id):

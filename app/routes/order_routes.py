@@ -5,10 +5,10 @@ from app.models import db, Order, User, Product
 from app.schemas.order_schema import order_schema, orders_schema
 
 # =============================================================================
-# 🎯 PRESENTATION NOTE - API FUNCTIONALITY REQUIREMENT 
+# 🎯 PRESENTATION NOTE - API FUNCTIONALITY REQUIREMENT
 # This file demonstrates SPECIFIC ORDER REQUIREMENTS:
 # - POST /orders              - Create order (requires user ID and order date)
-# - PUT add_product           - Add product to order (prevent duplicates)  
+# - PUT add_product           - Add product to order (prevent duplicates)
 # - DELETE remove_product    - Remove product from order
 # - GET orders by user       - Get orders for a user
 # - GET order products       - Get products in an order
@@ -16,6 +16,7 @@ from app.schemas.order_schema import order_schema, orders_schema
 
 # Create a blueprint for order routes
 order_bp = Blueprint('orders', __name__, url_prefix='/orders')
+
 
 # CREATE ORDER REQUIREMENT (requires user ID and order date)
 @order_bp.route('', methods=['POST'])
@@ -52,7 +53,7 @@ def get_orders():
     """Get all orders"""
     query = select(Order)
     orders = db.session.execute(query).scalars().all()
-    return orders_schema.jsonify(orders)
+    return jsonify(orders_schema.dump(orders))
 
 @order_bp.route('/<int:id>', methods=['GET'])
 def get_order(id):
@@ -62,7 +63,7 @@ def get_order(id):
     if not order:
         return jsonify({'error': 'Order not found'}), 404
     
-    return order_schema.jsonify(order)
+    return jsonify(order_schema.dump(order))
 
 # ADD PRODUCT TO ORDER REQUIREMENT (with duplicate prevention)
 @order_bp.route('/<int:order_id>/add_product/<int:product_id>', methods=['PUT'])
@@ -130,7 +131,7 @@ def get_orders_by_user(user_id):
     query = select(Order).where(Order.user_id == user_id)  # REQ2: Filter by user
     orders = db.session.execute(query).scalars().all()
     
-    return orders_schema.jsonify(orders)
+    return jsonify(orders_schema.dump(orders))
 
 # GET PRODUCTS IN ORDER REQUIREMENT
 @order_bp.route('/<int:order_id>/products', methods=['GET'])
@@ -142,7 +143,7 @@ def get_order_products(order_id):
         return jsonify({'error': 'Order not found'}), 404
     
     from app.schemas.product_schema import products_schema
-    return products_schema.jsonify(order.products)  # REQ1: Access relationship
+    return jsonify(products_schema.dump(order.products))  # REQ1: Access relationship
 
 @order_bp.route('/<int:id>', methods=['DELETE'])
 def delete_order(id):

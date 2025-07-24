@@ -1,10 +1,11 @@
 import os
 
 # =============================================================================
-# 🎯 PRESENTATION NOTE - CODE QUALITY & CONFIGURATION REQUIREMENT 
+# 🎯 PRESENTATION NOTE - CODE QUALITY & CONFIGURATION REQUIREMENT
 # This file demonstrates:
-# - MYSQL DATABASE CONFIGURATION 
+# - MYSQL DATABASE CONFIGURATION
 # =============================================================================
+
 
 class Config:
     """Base configuration class"""
@@ -12,12 +13,14 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JSON_SORT_KEYS = False
 
+
 class DevelopmentConfig(Config):
     """Development configuration"""
     DEBUG = True
-    # MYSQL DATABASE CONFIGURATION REQUIREMENT
+    # SQLite DATABASE CONFIGURATION FOR DEVELOPMENT
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'mysql+mysqlconnector://root:13Agustus@localhost/ecommerce_api'  # REQ4: MySQL connection
+        'sqlite:///ecommerce_api.db'  # Using SQLite for easier development
+
 
 # Configuration dictionary
 config = {
